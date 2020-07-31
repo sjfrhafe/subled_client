@@ -5,15 +5,15 @@ var W3CWebSocket = require('websocket').w3cwebsocket;
 // remote functions
 var remoteFunctions = []
 remoteFunctions.handleUpdate = ({field}) => {for(let y = 0; y<8; y++)for(let x = 0; x<8; x++)pad.col(pad[field[y][x]], {0: x, 1: y})}
-remoteFunctions.handleUserOnline = ({amount}) => {}
 
 //websocket
 var initWebsocket = () => {
-  var client = new W3CWebSocket('wss://www.failearly.de/subledws', 'echo-protocol');
+  var client = new W3CWebSocket('ws://localhost:52001/subledws', 'echo-protocol');
+  // var client = new W3CWebSocket('wss://www.failearly.de/subledws', 'echo-protocol');
   client.onopen = () => {client.send(JSON.stringify({method: 'init', params: {}}))};
   client.onmessage = (e) => {
     let data = JSON.parse(e.data)
-    remoteFunctions[data.method](data.params);
+    if(remoteFunctions[data.method])remoteFunctions[data.method](data.params);
   }
 }
 
